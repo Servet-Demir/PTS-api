@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Personeller")
+@Table(name = "personeller")
 
 public class Personel {
 
@@ -30,6 +30,7 @@ public class Personel {
     @Column(nullable = false)
     private Boolean yonetici = false;
 
+    // başka tabloya bağlı sutunlar ilişki türü ve @JoinColumn ile tanımlanır
     @ManyToOne
     @JoinColumn(name = "birim_id", nullable = false)
     private Birim birim;
