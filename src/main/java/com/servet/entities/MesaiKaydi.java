@@ -1,6 +1,5 @@
 package com.servet.entities;
 
-import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 
@@ -21,30 +20,27 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 @Table(name = "mesai_kayitlari")
-
 public class MesaiKaydi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public BigInteger mesai_id;
+    private Long mesaiId;
 
-    @Column
-    public Time cikis_saati;
+    @Column(name = "cikis_saati")
+    private Time cikisSaati;
 
-    @Column
-    public Time giris_saati;
+    @Column(name = "giris_saati")
+    private Time girisSaati;
 
-    @Column
-    public boolean mesaiGecerli;
+    @Column(name = "mesai_gecerli")
+    private boolean mesaiGecerli;
 
-    @Column
-    public Date tarih;
+    @Column(name = "tarih")
+    private Date tarih;
 
     @ManyToOne
     @JoinColumn(name = "personel_id", nullable = false)
     private Personel personel;
-
 }

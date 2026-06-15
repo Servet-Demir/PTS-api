@@ -23,30 +23,28 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "maas_hesaplari")
-
 public class MaasHesabi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public BigInteger maasId;
+    private Long maasId;
 
     @Column(nullable = false)
-    public BigDecimal brutMaas;
+    private BigDecimal brutMaas;
 
     @Column(nullable = false)
-    public BigDecimal ceza;
+    private BigDecimal ceza;
 
     @Column(nullable = false)
-    public LocalDate donem;
+    private LocalDate donem;
 
     @Column(nullable = false)
-    public Integer gecersizGun;
+    private Integer gecersizGun;
 
     @Column(nullable = false)
-    public BigDecimal netMaas;
+    private BigDecimal netMaas;
 
     @ManyToOne
     @JoinColumn(name = "personel_id", nullable = false)
     private Personel personel;
-
 }
