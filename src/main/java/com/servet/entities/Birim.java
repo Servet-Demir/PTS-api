@@ -33,5 +33,4 @@ public class Birim {
     public void setAd(String ad) {
         this.ad = ad;
     }
-
 }
