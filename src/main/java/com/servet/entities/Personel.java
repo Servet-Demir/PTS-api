@@ -8,9 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "personeller")
+@Data
 
 public class Personel {
 
@@ -35,43 +37,4 @@ public class Personel {
     @JoinColumn(name = "birim_id", nullable = false)
     private Birim birim;
 
-    public String getAd() {
-        return ad;
-    }
-
-    public void setAd(String ad) {
-        this.ad = ad;
-    }
-
-    public String getSoyad() {
-        return soyad;
-    }
-
-    public void setSoyad(String soyad) {
-        this.soyad = soyad;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean getYonetici() {
-        return yonetici;
-    }
-
-    public void setYonetici(Boolean yonetici) {
-        this.yonetici = yonetici;
-    }
-
-    public Birim getBirim() {
-        return birim;
-    }
-
-    public void setBirim(Birim birim) {
-        this.birim = birim;
-    }
 }
