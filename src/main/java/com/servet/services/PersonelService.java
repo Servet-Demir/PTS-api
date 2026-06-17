@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.servet.entities.Personel;
 import com.servet.repository.PersonelRepository;
 import com.servet.entities.Birim;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class PersonelService {
 
@@ -22,6 +24,7 @@ public class PersonelService {
 
     public List<Personel> getAllPersonelList() {
         return personelRepository.findAll();
+
     }
 
     public Personel getPersonelById(Long id) {
