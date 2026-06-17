@@ -1,7 +1,7 @@
 package com.servet.entities;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,16 +29,16 @@ public class MesaiKaydi {
     private Long mesaiId;
 
     @Column(name = "cikis_saati")
-    private Time cikisSaati;
+    private LocalTime cikisSaati;
 
     @Column(name = "giris_saati")
-    private Time girisSaati;
+    private LocalTime girisSaati;
 
     @Column(name = "mesai_gecerli")
     private boolean mesaiGecerli;
 
     @Column(name = "tarih")
-    private Date tarih;
+    private LocalDate tarih;
 
     @ManyToOne
     @JoinColumn(name = "personel_id", nullable = false)
