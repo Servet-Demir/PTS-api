@@ -8,3 +8,12 @@ import com.servet.entities.Personel;
 public interface PersonelRepository extends JpaRepository<Personel, Long> {
 
 }
+
+// İçi boş olmasına rağmen şu metotlar otomatik gelir:
+
+// findAll()
+// findById(Long id)
+// save(Personel personel)
+// deleteById(Long id)
+// existsById(Long id)
+// count()
