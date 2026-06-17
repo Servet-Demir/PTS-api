@@ -15,8 +15,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor // parametresiz constructor oluşturur. Personel personel = new Personel();
+// public Personel() {
+// }
+@AllArgsConstructor // tüm fieldlari parametre olarak alan constructor oluşturur.
+// public Personel(Long personelId, String ad, String soyad, String telefon) {
+// this.personelId = personelId;
+// this.ad = ad;
+// this.soyad = soyad;
+// this.telefon = telefon;
+// }
 
 @Entity
 @Table(name = "personeller")
@@ -35,6 +43,9 @@ public class Personel {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(name = "telefon")
+    private String telefon;
 
     @Column(nullable = false)
     private Boolean yonetici = false;
