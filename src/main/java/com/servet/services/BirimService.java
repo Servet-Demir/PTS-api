@@ -1,8 +1,6 @@
 package com.servet.services;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.servet.entities.Birim;
@@ -13,8 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j // Simple Logging Facade for Java
 @Service
 public class BirimService {
-    @Autowired
-    private BirimRepository birimRepository;
+    private final BirimRepository birimRepository;
+
+    public BirimService(BirimRepository birimRepository) {
+        this.birimRepository = birimRepository;
+    }
 
     public List<Birim> getAllBirimList() {
         List<Birim> birimler = birimRepository.findAll();

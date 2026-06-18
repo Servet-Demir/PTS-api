@@ -17,11 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MesaiKaydiService {
 
-    @Autowired
-    private MesaiKaydiRepository mesaiKaydiRepository;
+    private final MesaiKaydiRepository mesaiKaydiRepository;
+    private final PersonelService personelService;
 
-    @Autowired
-    private PersonelService personelService;
+    public MesaiKaydiService(MesaiKaydiRepository mesaiKaydiRepository, PersonelService personelService) {
+        this.mesaiKaydiRepository = mesaiKaydiRepository;
+        this.personelService = personelService;
+    }
 
     private static final LocalTime mesaiBaslangic = LocalTime.of(9, 0);
     private static final LocalTime mesaiBitis = LocalTime.of(18, 0);

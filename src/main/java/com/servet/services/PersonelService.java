@@ -15,11 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class PersonelService {
 
-    @Autowired
-    private PersonelRepository personelRepository;
+    private final PersonelRepository personelRepository;
+    private final BirimService birimService;
 
-    @Autowired
-    private BirimService birimService;
+    public PersonelService(PersonelRepository personelRepository, BirimService birimService) {
+        this.personelRepository = personelRepository;
+        this.birimService = birimService;
+    }
 
     public List<Personel> getAllPersonelList() {
         List<Personel> personelList = personelRepository.findAll();

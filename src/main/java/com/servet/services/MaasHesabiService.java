@@ -18,14 +18,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MaasHesabiService {
 
-    @Autowired
-    private MaasHesabiRepository maasHesabiRepository;
+    private final MaasHesabiRepository maasHesabiRepository;
+    private final PersonelService personelService;
+    private final MesaiKaydiService mesaiKaydiService;
 
-    @Autowired
-    private PersonelService personelService;
-
-    @Autowired
-    private MesaiKaydiService mesaiKaydiService;
+    public MaasHesabiService(
+            MaasHesabiRepository maasHesabiRepository,
+            PersonelService personelService,
+            MesaiKaydiService mesaiKaydiService) {
+        this.maasHesabiRepository = maasHesabiRepository;
+        this.personelService = personelService;
+        this.mesaiKaydiService = mesaiKaydiService;
+    }
 
     private static final BigDecimal yoneticiMaas = new BigDecimal("40000");
     private static final BigDecimal personelMaas = new BigDecimal("30000");
