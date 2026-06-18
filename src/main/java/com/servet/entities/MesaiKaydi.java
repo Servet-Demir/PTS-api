@@ -35,7 +35,7 @@ public class MesaiKaydi {
     private LocalTime girisSaati;
 
     @Column(name = "mesai_gecerli")
-    private boolean mesaiGecerli;
+    private Boolean mesaiGecerli;
 
     @Column(name = "tarih")
     private LocalDate tarih;
