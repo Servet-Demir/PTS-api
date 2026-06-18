@@ -22,18 +22,12 @@ public class PersonelService {
     private BirimService birimService;
 
     public List<Personel> getAllPersonelList() {
-        log.info("Fetching all employee records.");
-
         List<Personel> personelList = personelRepository.findAll();
-
-        log.info("{} employee records found.", personelList.size());
-
+        log.info("{} employee records listed.", personelList.size());
         return personelList;
     }
 
     public Personel getPersonelById(Long id) {
-        log.info("Fetching employee by ID: {}", id);
-
         Personel personel = personelRepository.findById(id).orElse(null);
 
         if (personel == null) {
@@ -41,14 +35,10 @@ public class PersonelService {
             return null;
         }
 
-        log.info("Employee found. ID: {}", id);
-
         return personel;
     }
 
     public Personel savePersonel(Personel personel) {
-        log.info("Employee creation process started.");
-
         if (personel == null) {
             log.warn("Employee could not be created. Request body is null.");
             return null;
@@ -78,8 +68,6 @@ public class PersonelService {
     }
 
     public boolean deletePersonel(Long id) {
-        log.info("Employee deletion process started. ID: {}", id);
-
         if (personelRepository.existsById(id)) {
             personelRepository.deleteById(id);
 
@@ -94,8 +82,6 @@ public class PersonelService {
     }
 
     public Personel updatePersonel(Long id, Personel request) {
-        log.info("Employee update process started. ID: {}", id);
-
         Personel personel = personelRepository.findById(id).orElse(null);
 
         if (personel == null) {
@@ -113,8 +99,6 @@ public class PersonelService {
         personel.setEmail(request.getEmail());
         personel.setYonetici(request.getYonetici());
 
-        log.info("Employee basic information updated. ID: {}", id);
-
         if (request.getBirim() != null && request.getBirim().getBirimId() != null) {
             Long birimId = request.getBirim().getBirimId();
 
@@ -122,8 +106,6 @@ public class PersonelService {
 
             if (birim != null) {
                 personel.setBirim(birim);
-
-                log.info("Employee department updated. Employee ID: {}, Department ID: {}", id, birimId);
             } else {
                 log.warn("Employee department could not be updated. Department not found. Department ID: {}", birimId);
             }
