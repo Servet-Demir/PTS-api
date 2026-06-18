@@ -23,27 +23,29 @@ public class BirimService {
     }
 
     public Birim getBirimById(Long id) {
-        log.info("Fetching department by ID: {}", id);
         Birim birim = birimRepository.findById(id).orElse(null);
-        log.info("Department found. ID: {}", id);
+
+        if (birim == null) {
+            log.warn("Department not found. ID: {}", id);
+        }
+
         return birim;
     }
 
     public Birim saveBirim(Birim birim) {
-        log.info("Department creation process started.");
         Birim kaydedilenBirim = birimRepository.save(birim);
         log.info("Department created successfully. ID: {}", kaydedilenBirim.getBirimId());
         return kaydedilenBirim;
     }
 
     public boolean deleteBirim(Long id) {
-        log.info("Department deletion process started. ID: {}", id);
         boolean varMi = birimRepository.existsById(id);
 
         if (varMi == false) {
             log.warn("Department could not be deleted. Department not found. ID: {}", id);
             return false;
         }
+
         birimRepository.deleteById(id);
         log.info("Department deleted successfully. ID: {}", id);
 
@@ -51,7 +53,6 @@ public class BirimService {
     }
 
     public Birim updateBirim(Long id, Birim request) {
-        log.info("Department update process started. ID: {}", id);
         Birim birim = birimRepository.findById(id).orElse(null);
 
         if (birim == null) {
@@ -66,5 +67,4 @@ public class BirimService {
         log.info("Department updated successfully. ID: {}", guncellenenBirim.getBirimId());
         return guncellenenBirim;
     }
-
 }
