@@ -20,9 +20,9 @@ public class MesaiKaydiService {
     @Autowired
     private PersonelService personelService;
 
-    private static final LocalTime MESAI_BASLANGIC = LocalTime.of(9, 0);
-    private static final LocalTime MESAI_BITIS = LocalTime.of(18, 0);
-    private static final int TOLERANS_DAKIKA = 15;
+    private static final LocalTime mesaiBaslangic = LocalTime.of(9, 0);
+    private static final LocalTime mesaiBitis = LocalTime.of(18, 0);
+    private static final int toleransDakika = 15;
 
     public List<MesaiKaydi> getAllMesaiList() {
         return mesaiKaydiRepository.findAll();
@@ -71,14 +71,14 @@ public class MesaiKaydiService {
             return false;
         }
         int girisFark = (int) java.time.Duration.between(
-                MESAI_BASLANGIC, mesaiKaydi.getGirisSaati()).toMinutes();
+                mesaiBaslangic, mesaiKaydi.getGirisSaati()).toMinutes();
         int cikisFark = (int) java.time.Duration.between(
-                mesaiKaydi.getCikisSaati(), MESAI_BITIS).toMinutes();
+                mesaiKaydi.getCikisSaati(), mesaiBitis).toMinutes();
         int toplamEksik = 0;
         if (girisFark > 0)
             toplamEksik += girisFark;
         if (cikisFark > 0)
             toplamEksik += cikisFark;
-        return toplamEksik <= TOLERANS_DAKIKA;
+        return toplamEksik <= toleransDakika;
     }
 }
