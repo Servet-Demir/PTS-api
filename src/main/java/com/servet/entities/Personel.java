@@ -44,9 +44,6 @@ public class Personel {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "telefon")
-    private String telefon;
-
     @Column(nullable = false)
     private Boolean yonetici = false;
 
