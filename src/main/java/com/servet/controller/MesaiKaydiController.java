@@ -1,6 +1,7 @@
 package com.servet.controller;
 
 import java.util.List;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +29,7 @@ public class MesaiKaydiController {
     }
 
     @GetMapping("/list/{tarih}")
-    public MesaiKaydi getMesaiByTarih(@PathVariable LocalDate tarih) {
+    public List<MesaiKaydi> getMesaiByTarih(@PathVariable LocalDate tarih) {
         return mesaiKaydiService.getMesaiByTarih(tarih);
     }
 
