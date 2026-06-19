@@ -2,7 +2,6 @@ package com.servet.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +18,11 @@ import com.servet.services.BirimService;
 @RequestMapping("/rest/api/birim")
 public class BirimController {
 
-    @Autowired
-    private BirimService birimService;
+    private final BirimService birimService;
+
+    public BirimController(BirimService birimService) {
+        this.birimService = birimService;
+    }
 
     @GetMapping("/list")
     public List<Birim> getAllBirimList() {

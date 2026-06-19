@@ -3,7 +3,6 @@ package com.servet.controller;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +18,11 @@ import com.servet.services.MaasHesabiService;
 @RequestMapping("/rest/api/maas")
 public class MaasHesabiController {
 
-    @Autowired
-    private MaasHesabiService maasHesabiService;
+    private final MaasHesabiService maasHesabiService;
+
+    public MaasHesabiController(MaasHesabiService maasHesabiService) {
+        this.maasHesabiService = maasHesabiService;
+    }
 
     @GetMapping("/list")
     public List<MaasHesabi> getAllMaasHesabiList() {

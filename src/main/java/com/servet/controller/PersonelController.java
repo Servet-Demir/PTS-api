@@ -2,7 +2,6 @@ package com.servet.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +18,11 @@ import com.servet.services.PersonelService;
 @RequestMapping("/rest/api/personel")
 public class PersonelController {
 
-    @Autowired
-    private PersonelService personelService;
+    private final PersonelService personelService;
+
+    public PersonelController(PersonelService personelService) {
+        this.personelService = personelService;
+    }
 
     @GetMapping("/list")
     public List<Personel> getAllPersonelList() {
