@@ -14,15 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.servet.entities.MaasHesabi;
 import com.servet.services.MaasHesabiService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/api/maas")
 public class MaasHesabiController {
 
     private final MaasHesabiService maasHesabiService;
-
-    public MaasHesabiController(MaasHesabiService maasHesabiService) {
-        this.maasHesabiService = maasHesabiService;
-    }
 
     @GetMapping("/list")
     public List<MaasHesabi> getAllMaasHesabiList() {
@@ -34,8 +33,8 @@ public class MaasHesabiController {
         return maasHesabiService.getMaasHesabiById(id);
     }
 
-    @PostMapping("/hesapla")
-    public MaasHesabi hesaplaMaas(@RequestParam Long personelId,
+    @PostMapping("/hesapla/{personelId}")
+    public MaasHesabi hesaplaMaas(@PathVariable Long personelId,
             @RequestParam LocalDate donem) {
         return maasHesabiService.hesaplaMaas(personelId, donem);
     }

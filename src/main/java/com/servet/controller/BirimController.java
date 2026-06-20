@@ -14,15 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.servet.entities.Birim;
 import com.servet.services.BirimService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/rest/api/birim")
+@RequiredArgsConstructor
 public class BirimController {
 
     private final BirimService birimService;
-
-    public BirimController(BirimService birimService) {
-        this.birimService = birimService;
-    }
 
     @GetMapping("/list")
     public List<Birim> getAllBirimList() {

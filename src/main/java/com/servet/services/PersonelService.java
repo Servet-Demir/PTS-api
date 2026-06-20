@@ -8,19 +8,16 @@ import com.servet.entities.Personel;
 import com.servet.repository.PersonelRepository;
 import com.servet.entities.Birim;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class PersonelService {
 
     private final PersonelRepository personelRepository;
     private final BirimService birimService;
-
-    public PersonelService(PersonelRepository personelRepository, BirimService birimService) {
-        this.personelRepository = personelRepository;
-        this.birimService = birimService;
-    }
 
     public List<Personel> getAllPersonelList() {
         List<Personel> personelList = personelRepository.findAll();

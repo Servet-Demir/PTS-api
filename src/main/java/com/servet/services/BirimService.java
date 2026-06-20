@@ -6,16 +6,14 @@ import org.springframework.stereotype.Service;
 import com.servet.entities.Birim;
 import com.servet.repository.BirimRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j // Simple Logging Facade for Java
+@RequiredArgsConstructor
 @Service
 public class BirimService {
     private final BirimRepository birimRepository;
-
-    public BirimService(BirimRepository birimRepository) {
-        this.birimRepository = birimRepository;
-    }
 
     public List<Birim> getAllBirimList() {
         List<Birim> birimler = birimRepository.findAll();

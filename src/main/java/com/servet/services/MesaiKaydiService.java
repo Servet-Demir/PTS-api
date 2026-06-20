@@ -10,19 +10,16 @@ import com.servet.entities.MesaiKaydi;
 import com.servet.entities.Personel;
 import com.servet.repository.MesaiKaydiRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class MesaiKaydiService {
 
     private final MesaiKaydiRepository mesaiKaydiRepository;
     private final PersonelService personelService;
-
-    public MesaiKaydiService(MesaiKaydiRepository mesaiKaydiRepository, PersonelService personelService) {
-        this.mesaiKaydiRepository = mesaiKaydiRepository;
-        this.personelService = personelService;
-    }
 
     private static final LocalTime mesaiBaslangic = LocalTime.of(9, 0);
     private static final LocalTime mesaiBitis = LocalTime.of(18, 0);
@@ -35,6 +32,27 @@ public class MesaiKaydiService {
     public List<MesaiKaydi> getMesaiByTarih(LocalDate tarih) {
         log.info("Attendance records listed by date: {}", tarih);
         return mesaiKaydiRepository.findByTarih(tarih);
+    }
+
+    public List<MesaiKaydi> getMesaiByPersonelAndTarihAraligi(
+            Long personelId,
+            LocalDate baslangicTarihi,
+            LocalDate bitisTarihi) {
+
+        return mesaiKaydiRepository.findByPersonel_PersonelIdAndTarihBetween(
+                personelId,
+                baslangicTarihi,
+                bitisTarihi);
+    }
+
+    public List<MesaiKaydi> getMesaiByPersonelAndDonem(Long personelId, LocalDate donem) {
+        LocalDate ayBaslangic = donem.withDayOfMonth(1);
+        LocalDate ayBitis = donem.withDayOfMonth(donem.lengthOfMonth());
+
+        return getMesaiByPersonelAndTarihAraligi(
+                personelId,
+                ayBaslangic,
+                ayBitis);
     }
 
     public MesaiKaydi saveMesai(MesaiKaydi mesaiKaydi) {

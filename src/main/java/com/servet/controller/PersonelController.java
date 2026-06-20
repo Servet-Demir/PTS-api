@@ -14,15 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.servet.entities.Personel;
 import com.servet.services.PersonelService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/api/personel")
 public class PersonelController {
 
     private final PersonelService personelService;
-
-    public PersonelController(PersonelService personelService) {
-        this.personelService = personelService;
-    }
 
     @GetMapping("/list")
     public List<Personel> getAllPersonelList() {

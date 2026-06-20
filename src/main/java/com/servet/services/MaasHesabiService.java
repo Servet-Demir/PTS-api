@@ -11,24 +11,17 @@ import com.servet.entities.MesaiKaydi;
 import com.servet.entities.Personel;
 import com.servet.repository.MaasHesabiRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class MaasHesabiService {
 
     private final MaasHesabiRepository maasHesabiRepository;
     private final PersonelService personelService;
     private final MesaiKaydiService mesaiKaydiService;
-
-    public MaasHesabiService(
-            MaasHesabiRepository maasHesabiRepository,
-            PersonelService personelService,
-            MesaiKaydiService mesaiKaydiService) {
-        this.maasHesabiRepository = maasHesabiRepository;
-        this.personelService = personelService;
-        this.mesaiKaydiService = mesaiKaydiService;
-    }
 
     private static final BigDecimal yoneticiMaas = new BigDecimal("40000");
     private static final BigDecimal personelMaas = new BigDecimal("30000");
@@ -59,16 +52,23 @@ public class MaasHesabiService {
             return null;
         }
 
-        BigDecimal brutMaas = personel.getYonetici() ? yoneticiMaas : personelMaas;
-        List<MesaiKaydi> mesaiListesi = mesaiKaydiService.getMesaiByTarih(donem);
+        LocalDate ayBaslangic = donem.withDayOfMonth(1);
+        LocalDate ayBitis = donem.withDayOfMonth(donem.lengthOfMonth());
+
+        boolean yoneticiMi = Boolean.TRUE.equals(personel.getYonetici());
+
+        BigDecimal brutMaas = yoneticiMi ? yoneticiMaas : personelMaas;
+
+        List<MesaiKaydi> mesaiListesi = mesaiKaydiService.getMesaiByPersonelAndTarihAraligi(
+                personelId,
+                ayBaslangic,
+                ayBitis);
 
         int gecersizGun = 0;
 
-        if (!personel.getYonetici()) {
+        if (!yoneticiMi) {
             for (MesaiKaydi kayit : mesaiListesi) {
-                if (kayit.getPersonel().getPersonelId().equals(personelId) // Long nesne tipinde karşılaştırma için
-                                                                           // equals() kullanılır
-                        && Boolean.FALSE.equals(kayit.getMesaiGecerli())) {
+                if (Boolean.FALSE.equals(kayit.getMesaiGecerli())) {
                     gecersizGun++;
                 }
             }
@@ -79,7 +79,7 @@ public class MaasHesabiService {
 
         MaasHesabi maasHesabi = new MaasHesabi();
         maasHesabi.setPersonel(personel);
-        maasHesabi.setDonem(donem);
+        maasHesabi.setDonem(ayBaslangic);
         maasHesabi.setBrutMaas(brutMaas);
         maasHesabi.setGecersizGun(gecersizGun);
         maasHesabi.setCeza(ceza);
@@ -87,10 +87,10 @@ public class MaasHesabiService {
 
         MaasHesabi savedMaasHesabi = maasHesabiRepository.save(maasHesabi);
 
-        log.info("Salary calculation saved. ID: {}, Employee ID: {}, Period: {}, Invalid Days: {}, Net Salary: {}",
+        log.info("Monthly salary calculated. ID: {}, Employee ID: {}, Period: {}, Invalid Days: {}, Net Salary: {}",
                 savedMaasHesabi.getMaasId(),
                 personelId,
-                donem,
+                ayBaslangic,
                 gecersizGun,
                 netMaas);
 

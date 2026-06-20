@@ -12,4 +12,9 @@ public interface MesaiKaydiRepository extends JpaRepository<MesaiKaydi, Long> {
 
     List<MesaiKaydi> findByPersonel_PersonelId(Long personelId);
 
+    List<MesaiKaydi> findByPersonel_PersonelIdAndTarihBetween(
+            Long personelId,
+            LocalDate baslangicTarihi,
+            LocalDate bitisTarihi);
+
 }
