@@ -36,7 +36,7 @@ public class MesaiKaydiController {
         return mesaiKaydiService.getMesaiByTarih(tarih);
     }
 
-    @GetMapping("/personel/{personelId}/donem")
+    @GetMapping("/personel/{personelId}")
     public List<MesaiKaydi> getMesaiByPersonelAndDonem(
             @PathVariable Long personelId,
             @RequestParam("donem") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate donem) {
