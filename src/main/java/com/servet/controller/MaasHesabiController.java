@@ -3,6 +3,7 @@ package com.servet.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,12 @@ public class MaasHesabiController {
     public MaasHesabi hesaplaMaas(@PathVariable Long personelId,
             @RequestParam LocalDate donem) {
         return maasHesabiService.hesaplaMaas(personelId, donem);
+    }
+
+    @GetMapping("/donem")
+    public List<MaasHesabi> getMaasHesabiByDonem(
+            @RequestParam("donem") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate donem) {
+        return maasHesabiService.getMaasHesabiByDonem(donem);
     }
 
     @DeleteMapping("/delete/{id}")
