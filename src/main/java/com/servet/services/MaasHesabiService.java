@@ -33,6 +33,18 @@ public class MaasHesabiService {
         return maasHesabiList;
     }
 
+    public List<MaasHesabi> getMaasHesabiByDonem(LocalDate donem) {
+        LocalDate ayBaslangic = donem.withDayOfMonth(1);
+
+        List<MaasHesabi> maasHesabiList = maasHesabiRepository.findByDonem(ayBaslangic);
+
+        log.info("{} salary calculation records listed for period: {}",
+                maasHesabiList.size(),
+                ayBaslangic);
+
+        return maasHesabiList;
+    }
+
     public MaasHesabi getMaasHesabiById(Long id) {
         MaasHesabi maasHesabi = maasHesabiRepository.findById(id).orElse(null);
 
