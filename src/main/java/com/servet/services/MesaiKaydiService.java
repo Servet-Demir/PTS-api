@@ -78,14 +78,16 @@ public class MesaiKaydiService {
         MesaiKaydi mesaiKaydi = mesaiKaydiRepository.findById(id).orElse(null);
 
         if (mesaiKaydi != null) {
+            mesaiKaydi.setTarih(request.getTarih());
             mesaiKaydi.setGirisSaati(request.getGirisSaati());
             mesaiKaydi.setCikisSaati(request.getCikisSaati());
 
             mesaiKaydi.setMesaiGecerli(
                     hesaplaGecerlilik(mesaiKaydi.getPersonel(), mesaiKaydi));
 
-            log.info("Attendance record updated. Attendance ID: {}, Valid: {}",
+            log.info("Attendance record updated. Attendance ID: {}, Date: {}, Valid: {}",
                     id,
+                    mesaiKaydi.getTarih(),
                     mesaiKaydi.getMesaiGecerli());
 
             return mesaiKaydiRepository.save(mesaiKaydi);
