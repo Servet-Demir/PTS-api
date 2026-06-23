@@ -3,6 +3,7 @@ package com.servet.services;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -46,11 +47,22 @@ public class MaasHesabiService {
     }
 
     public MaasHesabi getMaasHesabiById(Long id) {
-        MaasHesabi maasHesabi = maasHesabiRepository.findById(id).orElse(null);
+        return maasHesabiRepository.findById(id)
+                .orElseGet(() -> {
+                    log.warn("Salary calculation not found. ID: {}", id);
+                    return null;
+                });
+    }
 
-        if (maasHesabi == null) {
-            log.warn("Salary calculation not found. ID: {}", id);
-            return null;
+    public Optional<MaasHesabi> getMaasHesabiByPersonelAndDonem(Long personelId, LocalDate donem) {
+        LocalDate ayBaslangic = donem.withDayOfMonth(1);
+
+        Optional<MaasHesabi> maasHesabi = maasHesabiRepository.findByPersonel_PersonelIdAndDonem(
+                personelId,
+                ayBaslangic);
+
+        if (maasHesabi.isEmpty()) {
+            log.info("No salary calculation found for employee ID: {}, period: {}", personelId, ayBaslangic);
         }
 
         return maasHesabi;

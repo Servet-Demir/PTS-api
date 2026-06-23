@@ -1,10 +1,17 @@
 package com.servet.services;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.servet.dto.PersonelDonemOzeti;
+import com.servet.entities.MaasHesabi;
+import com.servet.entities.MesaiKaydi;
 import com.servet.entities.Personel;
+import com.servet.repository.MaasHesabiRepository;
+import com.servet.repository.MesaiKaydiRepository;
 import com.servet.repository.PersonelRepository;
 import com.servet.entities.Birim;
 
@@ -17,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonelService {
 
     private final PersonelRepository personelRepository;
+    private final MesaiKaydiRepository mesaiKaydiRepository;
+    private final MaasHesabiRepository maasHesabiRepository;
     private final BirimService birimService;
 
     public List<Personel> getAllPersonelList() {
@@ -34,6 +43,32 @@ public class PersonelService {
         }
 
         return personel;
+    }
+
+    public Optional<PersonelDonemOzeti> getPersonelDonemOzeti(Long personelId, LocalDate donem) {
+        return personelRepository.findById(personelId)
+                .map(personel -> {
+                    LocalDate ayBaslangic = donem.withDayOfMonth(1);
+                    LocalDate ayBitis = donem.withDayOfMonth(donem.lengthOfMonth());
+
+                    List<MesaiKaydi> mesaiKayitlari = mesaiKaydiRepository.findByPersonel_PersonelIdAndTarihBetween(
+                            personelId,
+                            ayBaslangic,
+                            ayBitis);
+
+                    Optional<MaasHesabi> maasHesabi = maasHesabiRepository
+                            .findByPersonel_PersonelIdAndDonem(personelId, ayBaslangic);
+
+                    log.info(
+                            "Period summary listed for employee ID: {}, period: {}-{}, attendance count: {}, salary present: {}",
+                            personelId,
+                            ayBaslangic,
+                            ayBitis,
+                            mesaiKayitlari.size(),
+                            maasHesabi.isPresent());
+
+                    return new PersonelDonemOzeti(personel, mesaiKayitlari, maasHesabi);
+                });
     }
 
     public Personel savePersonel(Personel personel) {
