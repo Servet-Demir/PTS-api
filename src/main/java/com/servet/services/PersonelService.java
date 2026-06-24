@@ -57,7 +57,7 @@ public class PersonelService {
                             ayBitis);
 
                     Optional<MaasHesabi> maasHesabi = maasHesabiRepository
-                            .findByPersonel_PersonelIdAndDonem(personelId, ayBaslangic);
+                            .findFirstByPersonel_PersonelIdAndDonemOrderByMaasIdDesc(personelId, ayBaslangic);
 
                     log.info(
                             "Period summary listed for employee ID: {}, period: {}-{}, attendance count: {}, salary present: {}",

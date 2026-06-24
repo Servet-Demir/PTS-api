@@ -57,7 +57,7 @@ public class MaasHesabiService {
     public Optional<MaasHesabi> getMaasHesabiByPersonelAndDonem(Long personelId, LocalDate donem) {
         LocalDate ayBaslangic = donem.withDayOfMonth(1);
 
-        Optional<MaasHesabi> maasHesabi = maasHesabiRepository.findByPersonel_PersonelIdAndDonem(
+        Optional<MaasHesabi> maasHesabi = maasHesabiRepository.findFirstByPersonel_PersonelIdAndDonemOrderByMaasIdDesc(
                 personelId,
                 ayBaslangic);
 

@@ -13,5 +13,7 @@ public interface MaasHesabiRepository extends JpaRepository<MaasHesabi, Long> {
 
     List<MaasHesabi> findByPersonel_PersonelId(Long personelId);
 
-    Optional<MaasHesabi> findByPersonel_PersonelIdAndDonem(Long personelId, LocalDate donem);
+    Optional<MaasHesabi> findFirstByPersonel_PersonelIdAndDonemOrderByMaasIdDesc(
+            Long personelId,
+            LocalDate donem);
 }
