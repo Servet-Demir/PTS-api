@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,9 +36,15 @@ public class MaasHesabiController {
     }
 
     @PostMapping("/hesapla/{personelId}")
-    public MaasHesabi hesaplaMaas(@PathVariable Long personelId,
+    public ResponseEntity<?> hesaplaMaas(
+            @PathVariable Long personelId,
             @RequestParam LocalDate donem) {
-        return maasHesabiService.hesaplaMaas(personelId, donem);
+        try {
+            MaasHesabi maasHesabi = maasHesabiService.hesaplaMaas(personelId, donem);
+            return ResponseEntity.ok(maasHesabi);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/donem")

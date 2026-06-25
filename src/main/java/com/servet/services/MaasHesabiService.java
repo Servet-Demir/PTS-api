@@ -73,20 +73,41 @@ public class MaasHesabiService {
 
         if (personel == null) {
             log.warn("Salary calculation could not be completed. Employee not found. Employee ID: {}", personelId);
-            return null;
+            throw new RuntimeException("Personel bulunamadı.");
         }
 
         LocalDate ayBaslangic = donem.withDayOfMonth(1);
-        LocalDate ayBitis = donem.withDayOfMonth(donem.lengthOfMonth());
-
-        boolean yoneticiMi = Boolean.TRUE.equals(personel.getYonetici());
-
-        BigDecimal brutMaas = yoneticiMi ? yoneticiMaas : personelMaas;
+        LocalDate ayBitis = ayBaslangic.plusMonths(1).minusDays(1);
 
         List<MesaiKaydi> mesaiListesi = mesaiKaydiService.getMesaiByPersonelAndTarihAraligi(
                 personelId,
                 ayBaslangic,
                 ayBitis);
+
+        if (mesaiListesi.isEmpty()) {
+            log.warn("Salary calculation could not be completed. No attendance records. Employee ID: {}, Period: {}",
+                    personelId,
+                    ayBaslangic);
+
+            throw new RuntimeException("Bu döneme ait mesai kaydı bulunmadığı için maaş hesaplanamaz.");
+        }
+
+        Optional<MaasHesabi> mevcutMaas = maasHesabiRepository
+                .findFirstByPersonel_PersonelIdAndDonemOrderByMaasIdDesc(
+                        personelId,
+                        ayBaslangic);
+
+        if (mevcutMaas.isPresent()) {
+            log.info("Salary calculation already exists. Existing record returned. Employee ID: {}, Period: {}",
+                    personelId,
+                    ayBaslangic);
+
+            return mevcutMaas.get();
+        }
+
+        boolean yoneticiMi = Boolean.TRUE.equals(personel.getYonetici());
+
+        BigDecimal brutMaas = yoneticiMi ? yoneticiMaas : personelMaas;
 
         int gecersizGun = 0;
 
