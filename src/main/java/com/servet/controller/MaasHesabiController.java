@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.servet.dto.MaasDonemOzetiResponse;
 import com.servet.entities.MaasHesabi;
 import com.servet.services.MaasHesabiService;
 
@@ -51,6 +52,12 @@ public class MaasHesabiController {
     public List<MaasHesabi> getMaasHesabiByDonem(
             @RequestParam("donem") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate donem) {
         return maasHesabiService.getMaasHesabiByDonem(donem);
+    }
+
+    @GetMapping("/donem-ozeti")
+    public List<MaasDonemOzetiResponse> getDonemMaasOzeti(
+            @RequestParam LocalDate donem) {
+        return maasHesabiService.getDonemMaasOzeti(donem);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -2,15 +2,20 @@ package com.servet.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.servet.dto.MaasDonemOzetiResponse;
 import com.servet.entities.MaasHesabi;
 import com.servet.entities.MesaiKaydi;
 import com.servet.entities.Personel;
 import com.servet.repository.MaasHesabiRepository;
+import com.servet.repository.MesaiKaydiRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MaasHesabiService {
 
     private final MaasHesabiRepository maasHesabiRepository;
+    private final MesaiKaydiRepository mesaiKaydiRepository;
     private final PersonelService personelService;
     private final MesaiKaydiService mesaiKaydiService;
 
@@ -46,6 +52,59 @@ public class MaasHesabiService {
         return maasHesabiList;
     }
 
+    public List<MaasDonemOzetiResponse> getDonemMaasOzeti(LocalDate donem) {
+        LocalDate ayBaslangic = donem.withDayOfMonth(1);
+        LocalDate ayBitis = ayBaslangic.plusMonths(1).minusDays(1);
+
+        List<MesaiKaydi> mesaiListesi = mesaiKaydiRepository.findByTarihBetween(
+                ayBaslangic,
+                ayBitis);
+
+        Map<Long, List<MesaiKaydi>> personelMesaiMap = mesaiListesi
+                .stream()
+                .collect(Collectors.groupingBy(
+                        mesai -> mesai.getPersonel().getPersonelId()));
+
+        return personelMesaiMap
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparing(entry -> entry.getKey()))
+                .map(entry -> {
+                    List<MesaiKaydi> personelMesaileri = entry.getValue();
+
+                    Personel personel = personelMesaileri.get(0).getPersonel();
+
+                    boolean yoneticiMi = Boolean.TRUE.equals(personel.getYonetici());
+
+                    BigDecimal brutMaas = yoneticiMi ? yoneticiMaas : personelMaas;
+
+                    int gecersizGun = 0;
+
+                    if (!yoneticiMi) {
+                        gecersizGun = (int) personelMesaileri
+                                .stream()
+                                .filter(mesai -> Boolean.FALSE.equals(mesai.getMesaiGecerli()))
+                                .count();
+                    }
+
+                    BigDecimal ceza = cezaTutari.multiply(new BigDecimal(gecersizGun));
+                    BigDecimal netMaas = brutMaas.subtract(ceza);
+
+                    return new MaasDonemOzetiResponse(
+                            personel.getPersonelId(),
+                            personel.getAd(),
+                            personel.getSoyad(),
+                            personel.getYonetici(),
+                            ayBaslangic,
+                            personelMesaileri.size(),
+                            gecersizGun,
+                            brutMaas,
+                            ceza,
+                            netMaas);
+                })
+                .toList();
+    }
+
     public MaasHesabi getMaasHesabiById(Long id) {
         return maasHesabiRepository.findById(id)
                 .orElseGet(() -> {
@@ -62,7 +121,9 @@ public class MaasHesabiService {
                 ayBaslangic);
 
         if (maasHesabi.isEmpty()) {
-            log.info("No salary calculation found for employee ID: {}, period: {}", personelId, ayBaslangic);
+            log.info("No salary calculation found for employee ID: {}, period: {}",
+                    personelId,
+                    ayBaslangic);
         }
 
         return maasHesabi;
@@ -92,10 +153,9 @@ public class MaasHesabiService {
             throw new RuntimeException("Bu döneme ait mesai kaydı bulunmadığı için maaş hesaplanamaz.");
         }
 
-        Optional<MaasHesabi> mevcutMaas = maasHesabiRepository
-                .findFirstByPersonel_PersonelIdAndDonemOrderByMaasIdDesc(
-                        personelId,
-                        ayBaslangic);
+        Optional<MaasHesabi> mevcutMaas = maasHesabiRepository.findFirstByPersonel_PersonelIdAndDonemOrderByMaasIdDesc(
+                personelId,
+                ayBaslangic);
 
         if (mevcutMaas.isPresent()) {
             log.info("Salary calculation already exists. Existing record returned. Employee ID: {}, Period: {}",
