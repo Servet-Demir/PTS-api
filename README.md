@@ -56,7 +56,7 @@ pts-api
 Repoyu klonlayın:
 
 ```bash
-git clone https://github.com/kullanici-adi/pts-api.git
+git clone https://github.com/Servet-Demir/pts-api.git
 ```
 
 Proje klasörüne gidin:
